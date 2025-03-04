@@ -49,19 +49,20 @@ public class Window implements ActionListener {
 		return panel;
 	}
 	
-	private void setGridProperties(int gridx, int gridy, int gridwidth, int gridheight, double weightx, double weighty, int fill)
-{
-     		c.gridx = gridx;
-        	c.gridy = gridy;
-        	c.gridwidth = gridwidth;
-        	c.gridheight = gridheight;
-        	c.weightx = weightx;
-        	c.weighty = weighty;
+	private void setGridProperties(int gridx, int gridy, int gridwidth, int gridheight, double weightx, double weighty, int fill){
+     	c.gridx = gridx;
+        c.gridy = gridy;
+        c.gridwidth = gridwidth;
+        c.gridheight = gridheight;
+        c.weightx = weightx;
+        c.weighty = weighty;
 		c.fill = fill;
 	}
 
 	public void actionPerformed(ActionEvent e){
-		diagram.addClass();
+		int x = (int)(Math.random() * diagram.getWidth());
+    	int y = (int)(Math.random() * diagram.getHeight());
+		diagram.addClass(new Point(x,y));
 		diagram.requestFocusInWindow();
 	}
 	

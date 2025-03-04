@@ -1,24 +1,22 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-//otros imports …
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.*;
 
 
-public class Association {
-
-	// Atributos
-	// ...
-	
-	// Constructores
-	// ...
-	
-	public void draw(Graphics graphics) {
-		// Dibuja la asociación
-		Graphics2D graphics2d = (Graphics2D)graphics;
-
-		// ...
-	}
-
-	// Más métodos
-	// ...
-
+class Association {
+    private Class class1, class2;
+    
+    public Association(Class c1, Class c2) {
+        class1 = c1;
+        class2 = c2;
+    }
+    
+    public void draw(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.drawLine(class1.getX() + 50, class1.getY()  + 25,
+                   class2.getX()  + 50, class2.getY() + 25);
+    }
 }
