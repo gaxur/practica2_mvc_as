@@ -8,7 +8,6 @@ public class Window implements ActionListener {
 	private Diagram diagram; //superficie de dibujo
 	private JPanel panel; 
 	private GridBagConstraints c;
-	private JButton button; //para añadir clases
 	private JLabel labelNClasses;
 	private JLabel labelNAssociations;
 	
