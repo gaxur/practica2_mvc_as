@@ -18,7 +18,6 @@ class Class {
         bounds = new Rectangle(location.x, location.y, 150, 100);
 	}
 
-    //
     public void setHighlighted(boolean highlighted) {
         this.highlighted = highlighted;
     }
@@ -34,7 +33,6 @@ class Class {
     public boolean isSelected() {
         return selected;
     }
-
     
     public void draw(Graphics g) {
         // Dibujar el rectángulo de la clase

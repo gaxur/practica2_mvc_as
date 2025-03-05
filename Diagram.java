@@ -14,9 +14,10 @@
 		private Vector<Class> classes = new Vector<>(); // Clases creadas por el usuario
 		private Vector<Association> associations = new Vector<>(); // Asociaciones creadas por el usuario
 		private Class selectedClass = null; // Clase seleccionada
-		private Class lastselectedClass = null; // Clase seleccionada
+		private Class lastselectedClass = null; // Clase seleccionada azul (S)
+		private Class highlightedClass = null; // Clase seleccionada verde (S + move)
 		private Point lastMousePosition = null; // Última posición del ratón
-		private boolean mousePressedBefore = false;
+		private boolean mousePressedBefore = false; // Si el ratón ha sido presionado antes
 
 		//metodos
 		public Diagram(Window theWindow) {
@@ -38,17 +39,6 @@
 			window.updateNClasses(this);
 			repaint();
 		}
-
-/*
-		//Añade una asociación al diagrama
-		public void addAssociation(Point position){
-			System.out.println("Añadiendo asociacion en " + position);
-			Association newClass = new Association();
-			classes.add(newClass);
-			updateNAssociations();
-			repaint();
-		}
-*/
 
 		//Devuelve el número de clases
 		public int getNClasses(){
@@ -93,10 +83,11 @@
 		public void mouseReleased(MouseEvent e) {
 			if (mousePressedBefore){
 				for (Class c : classes) {
-					if (c.contains(e.getPoint()) && lastselectedClass != null) {
+					if (c.contains(e.getPoint()) && lastselectedClass != null && hayAsociacion(lastselectedClass, c) == false) {
 						Association a = new Association(lastselectedClass, c);
 						associations.add(a);
 						window.updateNAssociations(this);
+						c.setHighlighted(false);
 						repaint();
 						break;
 					}
@@ -105,6 +96,15 @@
 				lastMousePosition = null;
 				mousePressedBefore = false;
 			}
+		}
+
+		public boolean hayAsociacion(Class c1, Class c2){
+			for (Association a : associations) {
+				if ((a.getClass1() == c1 && a.getClass2() == c2) || (a.getClass1() == c2 && a.getClass2() == c1)) {
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		// Se ejecuta cuando el cursor entra en el área del componente JPanel.
@@ -175,9 +175,6 @@
                 	return;
             	}
         	}
-
-			//Poner aqui otro booleano para poner en verde si estas haciendo una relacion
-			// mouseDraggedNow && lastselectedClass != null
 		}
 		
 		// Se ejecuta cuando el usuario mueve el cursor mientras mantiene presionado un botón del ratón.
@@ -187,12 +184,36 @@
 					System.out.println("Clase seleccionada: " + c.getName());
 					if (lastselectedClass == c && c.isSelected()) {
 						mousePressedBefore = true;
+						for (Class c2 : classes) {
+							if (c2.contains(e.getPoint())) {
+								if (!hayAsociacion(selectedClass, c2)){
+									if(highlightedClass != null && highlightedClass != c2){
+										highlightedClass.setHighlighted(false);
+									}
+									highlightedClass = c2;
+									highlightedClass.setHighlighted(true);
+									repaint();
+								}
+								else{
+									if (highlightedClass != null) {
+										highlightedClass.setHighlighted(false);
+										highlightedClass = null;
+										repaint();
+									}
+								}
+							}
+						}
+
 					} 
 					else if (c.isSelected() == false && selectedClass == c) { // Condición modificada
 						int dx = e.getX() - lastMousePosition.x;
 						int dy = e.getY() - lastMousePosition.y;
 						selectedClass.setPosition(dx, dy);
 						lastMousePosition = e.getPoint();
+						repaint();
+					} else if(highlightedClass != null){
+						highlightedClass.setHighlighted(false);
+						highlightedClass = null;
 						repaint();
 					}
 				}
@@ -248,21 +269,4 @@
 		public void keyReleased(KeyEvent e) {
 			//No es necesaria implementación
 		}
-/*
-
-		public void paint(Graphics g) {
-        	super.paint(g);
-        	for (Class c : classes) {
-            	c.draw(g);
-        	}
-        	for (Association a : associations) {
-            	a.draw(g);
-        	}
-        	if (startAssociationClass != null && currentAssociationClass == null) {
-            g.setColor(Color.BLACK);
-            g.drawLine(startAssociationClass.getX() + startAssociationClass.getWidth() / 2,
-            startAssociationClass.getY() + startAssociationClass.getHeight() / 2,
-        	getMousePosition().x, getMousePosition().y);
-        }
-    }*/
 	}
