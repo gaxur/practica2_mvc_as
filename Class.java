@@ -82,14 +82,6 @@ class Class {
         int metodosX = this.getX() + (this.getWidth() - metodosWidth) / 2;
         g.drawString("metodos", metodosX, metodosY);
 
-/*
-        // Dibujar las líneas laterales del cuadrado de "métodos"
-        g.drawLine(this.getX(), this.getY() + nombreAltura + atributosAltura, this.getX(), this.getY() + nombreAltura + atributosAltura + metodosAltura); // Línea lateral izquierda
-        g.drawLine(this.getX() + this.getWidth(), this.getY() + nombreAltura + atributosAltura, this.getX() + this.getWidth(), this.getY() + nombreAltura + atributosAltura + metodosAltura); // Línea lateral derecha
-
-        // Dibujar el borde inferior del cuadrado
-        g.drawLine(this.getX(), this.getY() + nombreAltura + atributosAltura + metodosAltura, this.getX() + this.getWidth(), this.getY() + nombreAltura + atributosAltura + metodosAltura);
-    */
    }
     
     public boolean contains(Point p) {

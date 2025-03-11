@@ -18,6 +18,7 @@
 		private Class highlightedClass = null; // Clase seleccionada verde (S + move)
 		private Point lastMousePosition = null; // Última posición del ratón
 		private boolean mousePressedBefore = false; // Si el ratón ha sido presionado antes
+		private Point currentMousePosition = null; // Guarda la posición actual del ratón mientras se arrastra
 
 		//metodos
 		public Diagram(Window theWindow) {
@@ -59,6 +60,14 @@
 			for (Association a : associations) {
 				a.draw(g);
 			}
+			// Dibujar línea temporal mientras se arrastra el ratón (si hay una clase seleccionada)
+			if (lastselectedClass != null && currentMousePosition != null) {
+				g.setColor(Color.BLACK); // Color de la línea
+				g.drawLine(lastselectedClass.getX() + lastselectedClass.getWidth() / 2,
+						lastselectedClass.getY() + lastselectedClass.getHeight() / 2,
+						currentMousePosition.x, 
+						currentMousePosition.y);
+			}
 		}
 		
 		/********************************************/
@@ -95,7 +104,10 @@
 				selectedClass = null;
 				lastMousePosition = null;
 				mousePressedBefore = false;
-			}
+			}	
+			// Borrar la línea temporal al soltar el ratón
+    		currentMousePosition = null;
+    		repaint(); // Redibujar sin la línea
 		}
 
 		public boolean hayAsociacion(Class c1, Class c2){
@@ -179,6 +191,7 @@
 		
 		// Se ejecuta cuando el usuario mueve el cursor mientras mantiene presionado un botón del ratón.
 		public void mouseDragged(MouseEvent e) {
+			currentMousePosition = e.getPoint();
 			if (SwingUtilities.isLeftMouseButton(e)) {
 				for (Class c : classes) {
 					System.out.println("Clase seleccionada: " + c.getName());
