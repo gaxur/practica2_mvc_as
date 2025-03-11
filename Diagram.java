@@ -61,7 +61,7 @@
 				a.draw(g);
 			}
 			// Dibujar línea temporal mientras se arrastra el ratón (si hay una clase seleccionada)
-			if (lastselectedClass != null && currentMousePosition != null) {
+			if (lastselectedClass != null && currentMousePosition != null && mousePressedBefore) {
 				g.setColor(Color.BLACK); // Color de la línea
 				g.drawLine(lastselectedClass.getX() + lastselectedClass.getWidth() / 2,
 						lastselectedClass.getY() + lastselectedClass.getHeight() / 2,
@@ -97,6 +97,7 @@
 						associations.add(a);
 						window.updateNAssociations(this);
 						c.setHighlighted(false);
+						lastselectedClass.setSelected(false);
 						repaint();
 						break;
 					}
@@ -230,6 +231,7 @@
 						repaint();
 					}
 				}
+				repaint();
 			}
 		}
 		

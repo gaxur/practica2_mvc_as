@@ -22,8 +22,10 @@ class Association {
             g.drawRect(x, y - 75, 70, 50);
         } else {
             // Dibujar una asociación normal (línea recta)
-            g.drawLine(class1.getX() + 50, class1.getY() + 25,
-                    class2.getX() + 50, class2.getY() + 25);
+            g.drawLine(class1.getX() + class1.getWidth() / 2, 
+                                class1.getY() + class1.getHeight() / 2,
+                                class2.getX() + class2.getWidth() / 2, 
+                                class2.getY() + class2.getHeight() / 2);
         }
     }
 
