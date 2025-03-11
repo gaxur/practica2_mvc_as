@@ -13,12 +13,15 @@
 		private Window window; // Ventana en la que está el diagrama
 		private Vector<Class> classes = new Vector<>(); // Clases creadas por el usuario
 		private Vector<Association> associations = new Vector<>(); // Asociaciones creadas por el usuario
+
 		private Class selectedClass = null; // Clase seleccionada
 		private Class lastselectedClass = null; // Clase seleccionada azul (S)
 		private Class highlightedClass = null; // Clase seleccionada verde (S + move)
+
 		private Point lastMousePosition = null; // Última posición del ratón
 		private boolean mousePressedBefore = false; // Si el ratón ha sido presionado antes
 		private Point currentMousePosition = null; // Guarda la posición actual del ratón mientras se arrastra
+		private Stack<Class> deletedClasses = new Stack<>();
 
 		//metodos
 		public Diagram(Window theWindow) {
@@ -33,13 +36,26 @@
 		}
 		
 		//Añade una clase al diagrama
-		public void addClass(Point position){
+		public void addClass(Point position) {
 			System.out.println("Añadiendo clase en " + position);
-			Class newClass = new Class(position, getNClasses());
+		
+			Class newClass;
+			
+			if (!deletedClasses.isEmpty()) {
+				// Recuperar la última clase eliminada
+				newClass = deletedClasses.pop();
+				System.out.println("Recuperando clase eliminada: " + newClass.getName());
+			} else {
+				// Crear una nueva clase con el número secuencial normal
+				newClass = new Class(position, getNClasses());
+			}
+		
+			// Agregar la clase al diagrama
 			classes.add(newClass);
 			window.updateNClasses(this);
 			repaint();
 		}
+		
 
 		//Devuelve el número de clases
 		public int getNClasses(){
@@ -127,23 +143,7 @@
 		
 		// Se ejecuta cuando el cursor sale del área del componente JPanel.
 		public void mouseExited(MouseEvent e) {
-			/*
-			// Si se está arrastrando una clase seleccionada
-			if (selectedClass != null) {
-				int dx = e.getX() - lastMousePosition.x;
-				int dy = e.getY() - lastMousePosition.y;
-				selectedClass.setPosition(selectedClass.getX() + dx, selectedClass.getY() + dy);
-				lastMousePosition = e.getPoint();
-				repaint();
-			}
-			for (Class c : classes) {
-            if (!c.contains(e.getPoint()) && c.isHighlighted()) {
-                c.setHighlighted(false);
-                repaint();
-                break;
-            }
-        	}
-			*/
+		
 		}
 		
 		// Se ejecuta cuando el usuario hace clic y suelta el botón del ratón en el mismo lugar.
@@ -154,6 +154,8 @@
 					Class c = classIterator.next();
 					if (c.contains(e.getPoint())) {
 						System.out.println("Eliminando clase y sus asociaciones: " + c.getName());
+						// Se pushea la clase eliminada para poder recuperarla
+						deletedClasses.push(c);
 						// Usar Iterator para eliminar asociaciones sin errores
 						Iterator<Association> associationIterator = associations.iterator();
 						while (associationIterator.hasNext()) {
@@ -219,7 +221,7 @@
 						}
 
 					} 
-					else if (c.isSelected() == false && selectedClass == c) { // Condición modificada
+					else if (c.isSelected() == false && selectedClass == c) { // Condición modificada y poner aqui despues la logica
 						int dx = e.getX() - lastMousePosition.x;
 						int dy = e.getY() - lastMousePosition.y;
 						selectedClass.setPosition(dx, dy);
