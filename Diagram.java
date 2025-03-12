@@ -45,6 +45,12 @@
 				// Recuperar la última clase eliminada
 				newClass = deletedClasses.pop();
 				System.out.println("Recuperando clase eliminada: " + newClass.getName());
+
+				//Si la clase recuperada estaba seleccionada, deseleccionarla
+				if (newClass.isSelected()) {
+					newClass.setSelected(false);
+					lastselectedClass = null;
+				}
 			} else {
 				// Crear una nueva clase con el número secuencial normal
 				newClass = new Class(position, getNClasses());
